@@ -2,7 +2,7 @@ import pygame, sys, numpy, keyboard
 from pygame.locals import *
 from PIL import Image, ImageDraw
 
-(width, height) = (1597, 1277)
+(width, height) = (1900, 768)
 
 pygame.init()
 screen = pygame.display.set_mode((width, height))
@@ -13,24 +13,65 @@ start_height=640
 start_width=360
 
 map=pygame.image.load('map.png')
-screen.blit(map,(0,0))
+rect=map.get_rect()
+screen.blit(map,rect)
+pygame.display.flip()
+myfont = pygame.font.SysFont('Times New Roman', 25)
+sprites=pygame.image.load('spritesheet.png')
+state=""
 
 while True: # main game loop
-    screen.fill((0,0,0))
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
-    pygame.draw.circle(screen, (0,0,255), (start_width,start_height), 20)
-    
-    pygame.draw.circle(screen, (0,255,0), (50,50), 20)
+    screen.fill((255,255,255))
+    screen.blit(map,rect)
+
+    #for the purpose of testing
+    color=(0,0,255)
+    pygame.draw.rect(screen, color, pygame.Rect(700, 0, 127, 85),2)
+    pygame.draw.rect(screen, color, pygame.Rect(733, 60, 126, 120),2)
+    pygame.draw.rect(screen, color, pygame.Rect(765, 90, 126, 150),2)
+    pygame.draw.rect(screen, color, pygame.Rect(850, 125, 71, 95),2)
+    pygame.draw.rect(screen, color, pygame.Rect(733, 222, 126, 125),2)
+    pygame.draw.rect(screen, color, pygame.Rect(733, 347, 155, 125),2)
+    pygame.draw.rect(screen, color, pygame.Rect(700, 380, 220, 60),2)
+    pygame.display.flip()
+
+    textsurface = myfont.render('Status Bar', False, (0, 0, 0))
+    screen.blit(textsurface,(1700,10))
 
     if keyboard.is_pressed('left'):
-        start_width-=1
+        start_width-=2
+        state="left"
     if keyboard.is_pressed('down'):
-        start_height+=1
+        start_height+=2
+        state="down"
     if keyboard.is_pressed('right'):
-        start_width+=1
+        start_width+=2
+        state="right"
     if keyboard.is_pressed('up'):
-        start_height-=1
+        start_height-=2
+        state="up"
+
+    x=0
+    y=0
+    if state=="down":
+        for i in range(4):
+            screen.blit(sprites, (start_width,start_height), (x,0,64,64))
+            if not (x==256):
+                x+64
+            else:
+                x=0
+
+    if start_height<0:
+        start_height+=10
+    if start_height>768:
+        start_height-=10
+    if start_width<0:
+        start_width+=10
+    if start_height>1594:
+        start_width-=10
+    
     pygame.display.update()
