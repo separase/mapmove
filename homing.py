@@ -8,14 +8,14 @@ pygame.init()
 screen = pygame.display.set_mode((width, height), pygame.DOUBLEBUF)
 pygame.display.set_caption('TLP')
 
-start_height=2000
-start_width=2000
+start_height=3200
+start_width=3200
 
 v=2
 #size = (1594*.5, 1277*.5)
 #size = (1236, 937)
 #size = (3168*.45, 2144*.45)
-size = (5655*3, 3879*3)
+size = (5655*3.5, 3879*3.5)
 #map=pygame.image.load('lakemap.png')
 map=pygame.image.load('WestIsland_v1.png')
 og_map=map
