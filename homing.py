@@ -1,8 +1,10 @@
 import pygame, sys, numpy, keyboard
 from pygame.locals import *
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 
 (width, height) = (1900, 1050)
+
+#
 
 pygame.init()
 screen = pygame.display.set_mode((width, height), pygame.DOUBLEBUF)
@@ -17,7 +19,13 @@ v=2
 #size = (3168*.45, 2144*.45)
 size = (5655*3.5, 3879*3.5)
 #map=pygame.image.load('lakemap.png')
-map=pygame.image.load('WestIsland_v1.png')
+backmap=Image.open('WestIsland_v1.png')
+backstar=Image.open('star.png')
+backstar = backstar.resize((18,18))
+backmap2=backmap.copy()
+backmap.paste(backstar, (1230,1040))
+backmap.save('WestIsland.png', quality=95)
+map=pygame.image.load('WestIsland.png')
 og_map=map
 map= pygame.transform.scale(map, size)
 #map= pygame.transform.scale(map, (1236, 937))
@@ -26,6 +34,7 @@ screen.blit(map,rect)
 
 bg=pygame.image.load('bg.png')
 txtbox=pygame.image.load('txtbox.png')
+woman=pygame.image.load('blond_woman_spritesheet.png')
 
 myfont = pygame.font.SysFont('High Tower Text', 50)
 state=""
@@ -164,4 +173,7 @@ while True: # main game loop
         if start_width>1560*.8:
             start_width-=10
         '''
+        if start_width>=1230-60 and start_width <=1248-60:
+            if start_height==1040-80 and start_height <= 1058-80:
+                print("you are here!")
         pygame.display.update()
