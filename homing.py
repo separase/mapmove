@@ -26,8 +26,8 @@ backmap2=backmap.copy()
 backmap.paste(backstar, (1230,1040))
 backmap.save('WestIsland.png', quality=95)
 map=pygame.image.load('WestIsland.png')
-og_map=map
 map= pygame.transform.scale(map, size)
+og_map=map
 #map= pygame.transform.scale(map, (1236, 937))
 rect=map.get_rect()
 screen.blit(map,rect)
@@ -35,6 +35,8 @@ screen.blit(map,rect)
 bg=pygame.image.load('bg.png')
 txtbox=pygame.image.load('txtbox.png')
 woman=pygame.image.load('blond_woman_spritesheet.png')
+house_inside=pygame.image.load('villagehouse.png')
+house_inside= pygame.transform.scale(house_inside, (448*5,560*5))
 
 myfont = pygame.font.SysFont('High Tower Text', 50)
 state=""
@@ -47,6 +49,8 @@ tr1=pygame.image.load('lucas.png')
 tr2=pygame.image.load('dawn.png')
 
 not_selected=True
+door=False
+exit_door=False
 
 while True: # main game loop
     for event in pygame.event.get():
@@ -54,14 +58,24 @@ while True: # main game loop
             pygame.quit()
             sys.exit()
         elif event.type == KEYDOWN:
-            if event.key==pygame.K_1:
+            if event.key==pygame.K_1 and not_selected:
                 not_selected=False
                 sprites=pygame.image.load('sprites1.png')
                 sprites = pygame.transform.scale(sprites, (256,256))
-            elif event.key==pygame.K_2:
+            elif event.key==pygame.K_2 and not_selected:
                 not_selected=False
                 sprites=pygame.image.load('sprites2.png')
                 sprites = pygame.transform.scale(sprites, (256,256))
+            elif event.key==pygame.K_w and door:
+                map=house_inside
+                start_height=1650
+                start_width=1400
+                last_state="left"
+            elif event.key==pygame.K_w and exit_door:
+                map=og_map
+                start_height=3000
+                start_width=3820
+                last_state="down"
             elif event.key==pygame.K_s:
                 v=10
             else:
@@ -84,6 +98,8 @@ while True: # main game loop
         screen.blit(number2,(width/2+110,320))
         pygame.display.update()
     else:
+        door=False
+        exit_door=False
         #screen.blit(map,(0,0),rect)
         screen.blit(bg,(0,0))
         blue=(0,0,255)
@@ -111,8 +127,8 @@ while True: # main game loop
         #sub = pygame.transform.scale(sub, (900, 900))
         #screen.blit(bg,(0,0))
         #screen.blit(sub,(500,100))
-        #txtbox = pygame.transform.scale(txtbox, (1200, 400))
-        #screen.blit(txtbox,(340,-120))
+        txtbox = pygame.transform.scale(txtbox, (1200, 400))
+        screen.blit(txtbox,(340,-120))
         pygame.draw.rect(screen, (209,141,178), pygame.Rect(500,100,900,900),10)
 
 
@@ -161,8 +177,6 @@ while True: # main game loop
                 ctr+=1
             else:
                 ctr=0
-
-
         '''''
         if start_height<85:
             start_height+=10
@@ -173,7 +187,12 @@ while True: # main game loop
         if start_width>1560*.8:
             start_width-=10
         '''
-        if start_width>=1230-60 and start_width <=1248-60:
-            if start_height==1040-80 and start_height <= 1058-80:
-                print("you are here!")
+        if door==False and start_width>=3800 and start_width<=3860 and start_height>=2940 and start_height<=3000:
+            door=True
+            doortext = myfont.render('If you want to enter the house, press W.', False, (0, 0, 0))
+            screen.blit(doortext,(width/2-430,30))
+        elif exit_door==False and start_height>=1600 and start_height <= 1700 and start_width>= 1400 and start_width<=1500:
+            exit_door=True
+            doortext = myfont.render('If you want to exit the house, press W.', False, (0, 0, 0))
+            screen.blit(doortext,(width/2-430,30))
         pygame.display.update()
